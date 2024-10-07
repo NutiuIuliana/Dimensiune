@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Orientation Example</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 1px solid black; 
+        }
+    </style>
+</head>
+<body>
+
+    <p id="status">Aștept permisiune...</p>
+    <p id="a">Alpha = </p>
+    <p id="b">Beta = </p>
+    <p id="c">Gamma = </p>
+
+    <canvas id="canvas"></canvas>
+
+    <script type="text/javascript">
+        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+            DeviceOrientationEvent.requestPermission().then(response => {
+                if (response === 'granted') {
+                    window.addEventListener("deviceorientation", onDeviceOrientation);
+                    document.getElementById("status").innerHTML = "Permisiune acordată.";
+                } else {
+                    document.getElementById("status").innerHTML = "Permisiune refuzată.";
+                }
+            });
+        } else {
+            // Nu este necesară permisiunea
+            window.addEventListener("deviceorientation", onDeviceOrientation);
+        }
+
+        function onDeviceOrientation(evt) {
+            var alpha = evt.alpha !== null ? evt.alpha : 0; 
+            var beta = evt.beta !== null ? evt.beta : 0;   
+            var gamma = evt.gamma !== null ? evt.gamma : 0;  
+
+            document.getElementById("a").innerHTML = "Alpha = " + alpha.toFixed(2);
+            document.getElementById("b").innerHTML = "Beta = " + beta.toFixed(2);
+            document.getElementById("c").innerHTML = "Gamma = " + gamma.toFixed(2);
+
+            var canvas = document.getElementById("canvas");
+            var context = canvas.getContext("2d");
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            var center = { x: canvas.width / 2, y: canvas.height / 2 };
+            var squareSize = 50;
+
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            
+            context.fillStyle = "#6A0888";
+
+            // Desenarea pătratului centrat
+            context.fillRect(center.x - squareSize / 2, center.y - squareSize / 2, squareSize, squareSize);
+        }
+    </script>
+
+</body>
+</html>
