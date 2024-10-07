@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Orientation</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <p id="a">Alpha = </p>
+    <p id="b">Beta = </p>
+    <p id="c">Gamma = </p>
+    <canvas id="canvas" width="400" height="400"></canvas>
+
+    <script>
+        window.addEventListener("deviceorientation", onDeviceOrientation);
+
+        function onDeviceOrientation(evt) {
+            const alpha = evt.alpha;
+            const beta = evt.beta;
+            const gamma = evt.gamma;
+
+            document.getElementById("a").innerHTML = "Alpha = " + alpha.toFixed(2);
+            document.getElementById("b").innerHTML = "Beta = " + beta.toFixed(2);
+            document.getElementById("c").innerHTML = "Gamma = " + gamma.toFixed(2);
+
+            const canvas = document.getElementById("canvas");
+            const context = canvas.getContext("2d");
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Example: Drawing a rectangle based on beta value
+            context.fillStyle = "#6A0888";
+            const rectWidth = Math.abs(beta); // Use absolute value to keep it positive
+            const rectHeight = 50;
+            context.fillRect(180, 150, rectWidth, rectHeight);
+        }
+    </script>
+</body>
+</html>
